@@ -10,3 +10,13 @@
 @media(max-width:900px){.term-head,.term-layout{grid-template-columns:1fr}.term-stats{justify-content:flex-start}.term-grade{grid-template-columns:1fr}.term-card{min-height:auto}}
 @media(max-width:520px){.term-learning{padding:22px 15px}.term-head h2{font-size:1.45rem}.term-flip{padding:18px;min-height:240px}.term-list{max-height:260px}}
 
+
+.term-choice-explanations{margin:20px 0;padding-top:18px;border-top:1px solid var(--line);text-align:left}
+.term-choice-explanations h3{margin:0 0 7px;font-size:1.08rem;color:var(--navy)}
+.term-choice-intro{font-size:.83rem;line-height:1.65;color:var(--muted);margin:0 0 14px}
+.term-choice{background:#fff;border:1px solid var(--line);border-radius:11px;margin:10px 0;padding:14px}
+.term-choice.correct{border-color:#278b74;background:#edf9f4}
+.term-choice h4{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin:0;font-size:.95rem;color:var(--navy);line-height:1.6;overflow-wrap:anywhere}
+.term-choice-label{display:inline-block;padding:1px 7px;border-radius:5px;background:var(--navy);color:white;flex-shrink:0}
+.term-choice-answer{font-size:.7rem;border-radius:5px;padding:1px 7px;background:#d7eee5;color:#166c55;white-space:nowrap}
+.term-choice p{margin:9px 0 0;font-size:.9rem;line-height:1.9;overflow-wrap:anywhere}

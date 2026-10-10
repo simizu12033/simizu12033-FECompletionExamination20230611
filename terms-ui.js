@@ -61,6 +61,18 @@ function markTerm(status){
   termState.flipped=false;
   renderTerms();
 }
+function renderChoiceExplanations(term){
+  const choices=term.choices||[];
+  if(!choices.length)return "";
+  return `<section class="term-choice-explanations" aria-label="全選択肢の解説">
+    <h3>ア〜エの意味と違い</h3>
+    <p class="term-choice-intro">用語・記述の要点を比較して、選択肢を判断する理由を確認しましょう。</p>
+    ${choices.map(c=>`<article class="term-choice ${c.isCorrect?"correct":""}">
+      <h4><span class="term-choice-label">${termEsc(c.label)}</span>${termEsc(c.term)}${c.isCorrect?'<small class="term-choice-answer">正答</small>':""}</h4>
+      <p>${termEsc(c.meaning)}</p>
+    </article>`).join("")}
+  </section>`;
+}
 function renderTerms(){
   const section=document.querySelector("#termLearning");
   if(!section)return;
@@ -104,6 +116,7 @@ function renderTerms(){
           <i>${termEsc(active.trap)}</i>
         </span>
       </button>
+      ${termState.flipped?renderChoiceExplanations(active):""}
       <div class="term-tags">${active.tags.map(tag=>`<span>${termEsc(tag)}</span>`).join("")}</div>
       <div class="term-grade">
         <button type="button" data-term-status="known">説明できた</button>
