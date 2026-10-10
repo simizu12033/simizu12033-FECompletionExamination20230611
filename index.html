@@ -30,9 +30,9 @@
         同じ端末・同じブラウザで同じURLを再度開くと、採点結果、回答内容、学習レポート、理解チェックが前回と同じ状態で表示され、復習を続けられます。
         <small>※ ブラウザのサイトデータを削除した場合は保存内容も消去されます。</small>
       </p>
-      <nav class="quick-links" aria-label="学習メニュー"><a href="#q1">問題を解く →</a><a href="#termLearning">用語カード</a><a href="source-map.html">出典を確認</a></nav><div class="hero-stats">
+      <nav class="quick-links" aria-label="学習メニュー"><a href="#q1">問題を解く →</a><a href="#termLearning">用語カード</a><a href="source-map.html">出典を確認</a><a href="term-coverage.html">用語の学習範囲</a></nav><div class="hero-stats">
         <div><strong>60</strong><span>全問題</span></div>
-        <div><strong>60</strong><span>用語カード</span></div>
+        <div><strong>176</strong><span>用語カード</span></div>
         <div><strong>36</strong><span>目標正答数</span></div>
         <div><strong>90</strong><span>演習目安（分）</span></div>
       </div>
@@ -94,11 +94,11 @@
         <div>
           <p class="section-kicker">TERM CARDS</p>
           <h2>重要用語カード</h2>
-          <p>カードをめくると、正答だけでなくア〜エすべての用語・記述の意味と違いを確認できます。覚えた状態は自動保存されます。</p>
+          <p>全176カードで、正答・誤答の用語から関連知識まで学びます。意味、具体例、似た概念との違いを確認し、別の設問にも答えられる理解を身に付けましょう。記録は自動保存されます。</p>
         </div>
         <div id="termStats" class="term-stats" aria-label="用語カードの進捗"></div>
       </div>
-      <div class="term-tools" hidden>
+      <div class="term-tools">
         <label class="search"><span>⌕</span><input id="termSearch" type="search" placeholder="用語・説明・タグで検索"></label>
         <div id="termFilters" class="term-filters"></div>
       </div>
@@ -108,6 +108,7 @@
             <h3>復習におすすめの用語</h3>
             <div id="termWeakLinks" class="term-weak-links"></div>
           </section>
+          <section class="term-list-wrap"><h3>用語を選ぶ</h3><div id="termList" class="term-list"></div></section>
         </aside>
         <section class="term-study" aria-label="用語カード学習">
           <div class="term-nav">

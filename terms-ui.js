@@ -21,7 +21,10 @@ function termStatus(term){
 function termAnswered(term){
   return !!termStatus(term);
 }
-function filteredTerms(){return TERMS.slice();}
+function filteredTerms(){
+ const query=termState.query.trim().toLocaleLowerCase();
+ return TERMS.filter(t=>(termState.filter==="すべて"||t.field===termState.filter)&&(!query||[t.term,t.meaning,t.cue,t.trap,...t.tags,...(t.choices||[]).flatMap(c=>[c.term,c.meaning])].join(" ").toLocaleLowerCase().includes(query)));
+}
 function termReviewContext(){
   if(typeof window.getTermReviewState==="function")return window.getTermReviewState();
   return {graded:false,questionNumbers:[]};
@@ -30,7 +33,7 @@ function weakTermsFromAnswers(){
   const state=termReviewContext();
   if(!state.graded)return [];
   const selected=new Set(state.questionNumbers.map(Number));
-  return TERMS.filter(t=>selected.has(Number(t.q)));
+  return TERMS.filter(t=>(t.questions||[t.q]).some(n=>selected.has(Number(n))));
 }
 function reviewTermMessage(){
   const state=termReviewContext();
@@ -47,6 +50,10 @@ function setActiveTerm(index){
 function jumpToTerm(termId){
   const target=TERMS.find(t=>t.id===termId);
   if(!target)return;
+  if(!filteredTerms().some(t=>t.id===termId)){
+    termState.query="";termState.filter="すべて";
+    const search=document.querySelector("#termSearch");if(search)search.value="";
+  }
   const index=filteredTerms().findIndex(t=>t.id===termId);
   setActiveTerm(index<0?0:index);
 }
@@ -60,6 +67,15 @@ function markTerm(status){
   termState.active=next;
   termState.flipped=false;
   renderTerms();
+}
+function renderTermDetail(term){
+ const defenses=term.defenses?`<h3>主な対策</h3><ul>${term.defenses.map(d=>`<li>${termEsc(d)}</li>`).join("")}</ul>`:"";
+ const source=term.source?`<p><a href="${termEsc(term.source.url)}" target="_blank" rel="noopener noreferrer">${termEsc(term.source.title)}</a></p>`:"";
+ const check=term.check?`<details class="term-transfer-check"><summary>理解を確かめる</summary><p>${termEsc(term.check)}</p><details><summary>答えを見る</summary><p>${termEsc(term.checkAnswer)}</p></details></details>`:"";
+ const picture=term.diagram?`<img class="term-concept-diagram" src="${termEsc(term.diagram)}" alt="${termEsc(term.term)}の具体例">`:"";
+ const details=term.example?`<section class="term-choice-explanations"><h3>具体例</h3><p>${termEsc(term.example)}</p>${picture}${defenses}${check}${source}</section>`:"";
+ const links=term.relatedTerms?`<section class="term-choice-explanations"><h3>問${term.q}から広げる関連用語</h3><div class="term-related-links">${term.relatedTerms.map(t=>`<a href="#termLearning" data-term-ref="${termEsc(t.id)}">${termEsc(t.term)}</a>`).join("")}</div></section>`:"";
+ return details+links;
 }
 function renderChoiceExplanations(term){
   const choices=term.choices||[];
@@ -90,7 +106,7 @@ function renderTerms(){
     ["説明できない",weak]
   ].map(([label,value])=>`<div><strong>${value}</strong><span>${label}</span></div>`).join("");
   const filters=document.querySelector("#termFilters");
-  if(filters)filters.innerHTML="";
+  if(filters)filters.innerHTML=termFields.map(field=>`<button type="button" data-term-field="${termEsc(field)}" class="${termState.filter===field?"active":""}" aria-pressed="${termState.filter===field}">${termEsc(field)}</button>`).join("");
   const card=document.querySelector("#termCard");
   if(!active){
     card.innerHTML=`<p class="term-empty">条件に一致する用語がありません。</p>`;
@@ -116,7 +132,7 @@ function renderTerms(){
           <i>${termEsc(active.trap)}</i>
         </span>
       </button>
-      ${termState.flipped?renderChoiceExplanations(active):""}
+      ${termState.flipped?renderChoiceExplanations(active)+renderTermDetail(active):""}
       <div class="term-tags">${active.tags.map(tag=>`<span>${termEsc(tag)}</span>`).join("")}</div>
       <div class="term-grade">
         <button type="button" data-term-status="known">説明できた</button>
@@ -151,6 +167,11 @@ function initTerms(){
       renderTerms();
     }
   };
+  const termFilters=document.querySelector("#termFilters");
+  if(termFilters)termFilters.onclick=e=>{
+    const button=e.target.closest("[data-term-field]");if(!button)return;
+    termState.filter=button.dataset.termField;termState.active=0;termState.flipped=false;renderTerms();
+  };
   const termList=document.querySelector("#termList");
   if(termList)termList.onclick=e=>{
     const button=e.target.closest("[data-term-index]");
@@ -166,6 +187,10 @@ function initTerms(){
     if(!link)return;
     jumpToTerm(link.dataset.termRef);
   });
+  const termSearch=document.querySelector("#termSearch");
+  if(termSearch)termSearch.oninput=()=>{
+    termState.query=termSearch.value;termState.active=0;termState.flipped=false;renderTerms();
+  };
   document.querySelector("#termPrev").onclick=()=>setActiveTerm(termState.active-1);
   document.querySelector("#termNext").onclick=()=>setActiveTerm(termState.active+1);
   document.querySelector("#termReset").onclick=()=>{

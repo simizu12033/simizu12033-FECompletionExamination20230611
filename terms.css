@@ -20,3 +20,7 @@
 .term-choice-label{display:inline-block;padding:1px 7px;border-radius:5px;background:var(--navy);color:white;flex-shrink:0}
 .term-choice-answer{font-size:.7rem;border-radius:5px;padding:1px 7px;background:#d7eee5;color:#166c55;white-space:nowrap}
 .term-choice p{margin:9px 0 0;font-size:.9rem;line-height:1.9;overflow-wrap:anywhere}
+
+.term-choice-explanations>p,.term-choice-explanations li{font-size:.9rem;line-height:1.9}.term-choice-explanations ul{padding-left:1.4em}.term-related-links{display:grid;gap:9px}.term-related-links a{display:block;padding:12px;background:white;border:1px solid var(--line);border-radius:9px;color:var(--blue);font-weight:700;overflow-wrap:anywhere}
+
+.term-transfer-check{margin-top:14px;border:1px solid var(--line);border-radius:9px;padding:12px;background:white}.term-transfer-check summary{cursor:pointer;font-weight:700;color:var(--navy)}.term-concept-diagram{display:block;width:100%;height:auto;margin:15px 0;border:1px solid var(--line);border-radius:10px}.term-tools[hidden]{display:none}
